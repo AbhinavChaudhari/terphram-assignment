@@ -1,23 +1,15 @@
 "use client";
-import { useState } from "react";
 import SideBar from "./sidebar";
 import PartList from "./partList";
-import { element_ids } from "@/data/data";
 import PartForm from "./partForm";
+import { useDisassemblyStore } from "@/store/disassemblyStore";
 
 export const Disassembly = () => {
-  const [selectedElectrolyzer, setSelectedElectrolyzer] = useState<
-    number | null
-  >(null);
-  const [selectedParts, setSelectedParts] = useState<string[]>([]);
-  const [checklistSelected, setChecklistSelected] = useState<string[]>([]);
+  const selectedElectrolyzer = useDisassemblyStore((state) => state.selectedElectrolyzer)
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-50 text-gray-800">
-      <SideBar
-        selectedElectrolyzer={selectedElectrolyzer}
-        setSelectedElectrolyzer={setSelectedElectrolyzer}
-      />
+      <SideBar />
 
       <div className="w-full h-full">
         {selectedElectrolyzer ? (
@@ -27,17 +19,8 @@ export const Disassembly = () => {
             </h2>
 
             <div className="flex w-full h-full">
-              <PartList
-                parts={element_ids}
-                selectedParts={selectedParts}
-                onSelect={setSelectedParts}
-                checklistSelected={checklistSelected}
-              />
-              <PartForm
-                selectedParts={selectedParts}
-                checklistSelected={checklistSelected}
-                setChecklistSelected={setChecklistSelected}
-              />
+              <PartList />
+              <PartForm />
             </div>
           </div>
         ) : (

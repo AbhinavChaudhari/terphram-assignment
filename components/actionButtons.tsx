@@ -1,6 +1,6 @@
 export default function ActionButtons() {
   return (
-    <div className="flex gap-4 justify-start mt-4">
+    <div className="flex gap-4 justify-start items-end mt-10">
       <button className="px-10 py-2 bg-black text-white rounded hover:bg-gray-800 cursor-pointer">
         Send to Repair
       </button>
