@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+A modern web application built with **Next.js**, **TypeScript**, and **Zustand** for managing electrolyzer disassembly processes efficiently.  
+The app allows operators to track, comment, and confirm statuses for each element part in real time.
 
-## Getting Started
+🌐 **Live Demo (Deploy on Vercel for free)** → [https://vercel.com/solutions/nextjs](https://vercel.com/solutions/nextjs)
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- 🧩 **Dynamic Part Selection**
+  - Select, confirm, and track the status of each element part.
+  - Disabled parts stay visible with their respective status.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- 🗂️ **Zustand Global State Management**
+  - Centralized, reactive state across all components.
+  - Keeps track of electrolyzers, parts, checklists, and comments efficiently.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- 🧾 **Confirmation Modals**
+  - Reusable modal component with animations using **Framer Motion**.
+  - Confirmation actions update global store instantly.
 
-## Learn More
+- 🗒️ **Comments & Checklist**
+  - Checklist items reflect per electrolyzer and persist after confirmation.
 
-To learn more about Next.js, take a look at the following resources:
+- 💾 **Persistent Confirmations**
+  - Stores each disassembly confirmation along with:
+    ```ts
+    {
+      ids: string[];
+      checklist: string[];
+      comments: Record<string, string>;
+      status: string;
+      confirmedAt: string;
+    }
+    ```
+  - Enables audit history and reusability for future steps like assembly.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- 💡 **Smooth UI Animations**
+  - Section transitions and modal openings animated with **Framer Motion**.
+  - Enhanced user experience without extra dependencies.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🛠️ Tech Stack
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Category | Tools |
+|-----------|-------|
+| Framework | **Next.js 14** |
+| Language | **TypeScript** |
+| State Management | **Zustand** |
+| Styling | **Tailwind CSS** |
+| Animations | **Framer Motion** |
+| Deployment | **Vercel** |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🧩 Folder Structure
+src/
+│
+├── app/ # Next.js app directory
+│ ├── page.tsx # Entry point
+│ ├── layout.tsx # Root layout
+│
+├── components/
+│ ├── Disassembly/ # Core disassembly UI
+│ │ ├── sidebar.tsx
+│ │ ├── partList.tsx
+│ │ ├── partForm.tsx
+│ │ ├── checkList.tsx
+│ │ ├── commentSection.tsx
+│ │ └── actionButtons.tsx
+│ └── ui/ # Reusable UI components (Modal, Status, etc.)
+│
+├── store/
+│ ├── disassemblyStore.ts # Zustand store for global disassembly state
+│ └── modalStore.ts # Zustand store for modals
+│
+├── data/
+│ └── data.ts # Static IDs and checklist data
+│
+└── utils/
+└── types.ts # Shared TypeScript interfaces
