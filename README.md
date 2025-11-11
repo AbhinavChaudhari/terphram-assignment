@@ -1,7 +1,7 @@
 A modern web application built with **Next.js**, **TypeScript**, and **Zustand** for managing electrolyzer disassembly processes efficiently.  
 The app allows operators to track, comment, and confirm statuses for each element part in real time.
 
-🌐 **Live Demo (Deploy on Vercel for free)** → [https://vercel.com/solutions/nextjs](https://vercel.com/solutions/nextjs)
+🌐 **Live Demo (Deploy on Vercel for free)** → [https://terphram-abhi.vercel.app/](https://terphram-abhi.vercel.app/)
 
 ---
 
@@ -54,29 +54,3 @@ The app allows operators to track, comment, and confirm statuses for each elemen
 
 ---
 
-## 🧩 Folder Structure
-src/
-│
-├── app/ # Next.js app directory
-│ ├── page.tsx # Entry point
-│ ├── layout.tsx # Root layout
-│
-├── components/
-│ ├── Disassembly/ # Core disassembly UI
-│ │ ├── sidebar.tsx
-│ │ ├── partList.tsx
-│ │ ├── partForm.tsx
-│ │ ├── checkList.tsx
-│ │ ├── commentSection.tsx
-│ │ └── actionButtons.tsx
-│ └── ui/ # Reusable UI components (Modal, Status, etc.)
-│
-├── store/
-│ ├── disassemblyStore.ts # Zustand store for global disassembly state
-│ └── modalStore.ts # Zustand store for modals
-│
-├── data/
-│ └── data.ts # Static IDs and checklist data
-│
-└── utils/
-└── types.ts # Shared TypeScript interfaces
