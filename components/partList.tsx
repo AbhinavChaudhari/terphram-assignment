@@ -1,6 +1,7 @@
 import { element_ids } from "@/data/data";
 import { useDisassemblyStore } from "@/store/disassemblyStore";
 import Status from "./status";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function PartList() {
   const {
@@ -45,65 +46,92 @@ export default function PartList() {
       <div className="grid grid-cols-5 font-semiboldpb-2 mb-2 text-center">
         <span className="col-span-1">Position</span>
         <span className="col-span-2">Element part ID</span>
-        <span className="cursor-pointer ml-auto inline-block border-b-2 border-transparent hover:border-gray-500" onClick={selectAllParts}>
+        <span
+          className="cursor-pointer ml-auto inline-block border-b-2 border-transparent hover:border-gray-500"
+          onClick={selectAllParts}
+        >
           Select all
         </span>
       </div>
-      {element_ids.map((p) => (
-        <div key={p.id} className="grid grid-cols-5 items-center">
-          <span className="text-center col-span-1">{p.position}</span>
+      <AnimatePresence>
+        {element_ids.map((p) => (
+          <motion.div
+            key={p.id}
+            layout
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="grid grid-cols-5 items-center"
+          >
+            <span className="text-center col-span-1">{p.position}</span>
 
-          <div className="flex items-center gap-4 w-full col-span-4">
-            <input
-              type="checkbox"
-              checked={selectedParts.includes(p.id)}
-              onChange={() => togglePart(p.id)}
-              className="w-3 h-3 accent-orange-600 cursor-pointer"
-              disabled={isDisabled(p.id)}
-            />
-            <button
-              onClick={() => togglePart(p.id)}
-              disabled={isDisabled(p.id)}
-              className={`w-20 py-2 border text-center transition  ${getClass(
-                p.id
-              )}`}
-            >
-              {p.id}
-            </button>
-            {isDisabled(p.id) && (
-              <Status id={p.id} partStatusMap={partInfoMap} />
-            )}
+            <div className="flex items-center gap-4 w-full col-span-4">
+              <input
+                type="checkbox"
+                checked={selectedParts.includes(p.id)}
+                onChange={() => togglePart(p.id)}
+                className="w-3 h-3 accent-orange-600 cursor-pointer"
+                disabled={isDisabled(p.id)}
+              />
+              <button
+                onClick={() => togglePart(p.id)}
+                disabled={isDisabled(p.id)}
+                className={`w-20 py-2 border text-center transition  ${getClass(
+                  p.id
+                )}`}
+              >
+                {p.id}
+              </button>
+              {isDisabled(p.id) && (
+                <Status id={p.id} partStatusMap={partInfoMap} />
+              )}
 
-            {/* ✅ Show checklist count safely */}
-            {(() => {
-              const partInfo = partInfoMap[p.id];
+              {/* ✅ Show checklist count safely */}
+              <AnimatePresence mode="popLayout">
+                {(() => {
+                  const partInfo = partInfoMap[p.id];
 
-              // If part was already confirmed, show its stored checklist count
-              if (partInfo?.checklistCount > 0) {
-                return (
-                  <p className="h-4 w-4 text-xs -ml-2.5 bg-gray-200 rounded-full text-center">
-                    {partInfo.checklistCount}
-                  </p>
-                );
-              }
+                  // If part was already confirmed, show its stored checklist count
+                  if (partInfo?.checklistCount > 0) {
+                    return (
+                      <motion.p
+                        key={`confirmed-${p.id}`}
+                        initial={{ opacity: 0, scale: 0.7 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.7 }}
+                        className="h-4 w-4 text-xs -ml-2.5 bg-gray-200 rounded-full text-center"
+                      >
+                        {partInfo.checklistCount}
+                      </motion.p>
+                    );
+                  }
 
-              // Else, if part is currently selected (but not confirmed), show current checklist count
-              if (
-                selectedParts.includes(p.id) &&
-                checklistSelected.length > 0
-              ) {
-                return (
-                  <p className="h-4 w-4 text-xs bg-gray-200 rounded-full text-center">
-                    {checklistSelected.length}
-                  </p>
-                );
-              }
+                  // Else, if part is currently selected (but not confirmed), show current checklist count
+                  if (
+                    selectedParts.includes(p.id) &&
+                    checklistSelected.length > 0
+                  ) {
+                    return (
+                      <motion.p
+                        key={`selected-${p.id}`}
+                        initial={{ opacity: 0, scale: 0.7 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.7 }}
+                        className="h-4 w-4 text-xs bg-gray-200 rounded-full text-center"
+                      >
+                        {checklistSelected.length}
+                      </motion.p>
+                    );
+                  }
 
-              return null;
-            })()}
-          </div>
-        </div>
-      ))}
+                  return null;
+                })()}
+              </AnimatePresence>
+            </div>
+          </motion.div>
+        ))}
+      </AnimatePresence>
     </div>
   );
 }
