@@ -3,6 +3,7 @@ import { useDisassemblyStore } from "@/store/disassemblyStore";
 
 export default function CommentSection() {
   const { selectedParts, comments, updateComment } = useDisassemblyStore();
+  
   if (!selectedParts.length) return null;
 
   return (

@@ -3,8 +3,9 @@ import Checklist from "./checkList";
 import CommentSection from "./commentSection";
 import ActionButtons from "./actionButtons";
 import { useDisassemblyStore } from "@/store/disassemblyStore";
+
 const PartForm = () => {
-  const selectedParts = useDisassemblyStore((s) => s.selectedParts);
+  const {selectedParts} = useDisassemblyStore();
 
   if (selectedParts.length <= 0) {
     return (
@@ -27,7 +28,7 @@ const PartForm = () => {
           </label>
           <textarea
             placeholder="Cut Out Comments here"
-            className="outline-0 text-xs p-2 rounded bg-gray-100 mt-1 mb-8"
+            className="outline-0 text-xs p-2 rounded bg-gray-100 mt-1 mb-8 h-20"
           ></textarea>
 
           <Checklist />

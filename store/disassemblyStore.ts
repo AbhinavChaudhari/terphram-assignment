@@ -3,18 +3,15 @@ import { element_ids } from "@/data/data";
 import { DisassemblyState } from "@/utils/types";
 
 export const useDisassemblyStore = create<DisassemblyState>((set, get) => ({
-
-  // inital State 
   selectedElectrolyzer: null,
   selectedParts: [],
   checklistSelected: [],
   comments: {},
+  confirmedDisassemblies: {}, // { [electrolyzerId]: [ { ids, checklist, comments, status, confirmedAt } ] }
 
   setSelectedElectrolyzer: (id) =>
-    set({ selectedElectrolyzer: id, selectedParts: [], checklistSelected: [] }),
+    set({ selectedElectrolyzer: id, selectedParts: [], checklistSelected: [], comments: {} }),
 
-
-  // element parts 
   togglePart: (id) => {
     const { selectedParts } = get();
     const exists = selectedParts.includes(id);
@@ -28,8 +25,6 @@ export const useDisassemblyStore = create<DisassemblyState>((set, get) => ({
   selectAllParts: () => set({ selectedParts: element_ids.map((e) => e.id) }),
   clearParts: () => set({ selectedParts: [] }),
 
-
-  // checklist 
   toggleChecklist: (item) => {
     const { checklistSelected } = get();
     const exists = checklistSelected.includes(item);
@@ -42,10 +37,59 @@ export const useDisassemblyStore = create<DisassemblyState>((set, get) => ({
 
   clearChecklist: () => set({ checklistSelected: [] }),
 
-
-  // comments
   updateComment: (id, comment) =>
     set((state) => ({
       comments: { ...state.comments, [id]: comment },
     })),
+
+  // ✅ Confirm a new disassembly (can be multiple per electrolyzer)
+  confirmDisassembly: (status) => {
+    const {
+      selectedElectrolyzer,
+      selectedParts,
+      checklistSelected,
+      comments,
+      confirmedDisassemblies,
+    } = get();
+
+    if (!selectedElectrolyzer) return;
+
+    const newEntry = {
+      ids: selectedParts,
+      checklist: checklistSelected,
+      comments,
+      status,
+      confirmedAt: new Date().toISOString(),
+    };
+
+    const existing = confirmedDisassemblies[selectedElectrolyzer] || [];
+
+    set({
+      confirmedDisassemblies: {
+        ...confirmedDisassemblies,
+        [selectedElectrolyzer]: [...existing, newEntry],
+      },
+      selectedParts: [],
+      checklistSelected: [],
+      comments: {},
+    });
+  },
+
+  // ✅ Update an existing disassembly entry
+  updateDisassembly: (electrolyzerId, index, updatedData) => {
+    const { confirmedDisassemblies } = get();
+    const entries = [...(confirmedDisassemblies[electrolyzerId] || [])];
+    entries[index] = {
+      ...entries[index],
+      ...updatedData,
+      updatedAt: new Date().toISOString(),
+    };
+
+    set({
+      confirmedDisassemblies: {
+        ...confirmedDisassemblies,
+        [electrolyzerId]: entries,
+      },
+    });
+  },
 }));

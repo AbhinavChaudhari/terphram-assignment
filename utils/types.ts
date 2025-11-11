@@ -8,11 +8,22 @@ export interface Electrolyzer {
   parts: Part[];
 }
 
+export interface DisassemblyData {
+  ids: string[];
+  checklist: string[];
+  comments: Record<string, string>;
+  status: string;
+  confirmedAt: string;
+  updatedAt: string;
+}
+
+
 export interface DisassemblyState {
   selectedElectrolyzer: number | null;
   selectedParts: string[];
   checklistSelected: string[];
   comments: Record<string, string>;
+  confirmedDisassemblies: Record<string, DisassemblyData[]>;
 
   // actions
   setSelectedElectrolyzer: (id: number | null) => void;
@@ -22,4 +33,6 @@ export interface DisassemblyState {
   toggleChecklist: (item: string) => void;
   clearChecklist: () => void;
   updateComment: (id: string, comment: string) => void;
+  confirmDisassembly:(status: string) => void;
+  updateDisassembly: (electrolyzerId:string, index:number, updatedData: DisassemblyData) => void;
 }
